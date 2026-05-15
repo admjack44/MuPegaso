@@ -1,0 +1,27 @@
+# Unity
+Client/MuPegasoClient/Library/
+Client/MuPegasoClient/Temp/
+Client/MuPegasoClient/Logs/
+Client/MuPegasoClient/UserSettings/
+Client/MuPegasoClient/obj/
+Client/MuPegasoClient/.vs/
+Client/MuPegasoClient/*.csproj
+Client/MuPegasoClient/*.sln
+
+# .NET Server
+Server/src/*/bin/
+Server/src/*/obj/
+Server/tests/*/bin/
+Server/tests/*/obj/
+Server/logs/
+
+# OS
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# IDE
+.idea/
+.vscode/
+*.user
+*.suo

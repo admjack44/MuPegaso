@@ -1,0 +1,57 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!21 &2100000
+Material:
+  serializedVersion: 8
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: Mat_Monster10
+  m_Shader: {fileID: 4800000, guid: 138aa44fa44e4bd4c8931d995c905efd, type: 3}
+  m_Parent: {fileID: 0}
+  m_ModifiedSerializedProperties: 0
+  m_ValidKeywords:
+  - _AlphaCutOff
+  m_InvalidKeywords: []
+  m_LightmapFlags: 4
+  m_EnableInstancingVariants: 0
+  m_DoubleSidedGI: 0
+  m_CustomRenderQueue: 3000
+  stringTagMap: {}
+  disabledShaderPasses: []
+  m_LockedProperties:
+  m_SavedProperties:
+    serializedVersion: 3
+    m_TexEnvs:
+      _MainTex:
+        m_Texture: {fileID: 2800000, guid: be1a9beb3b56e5b4ca2bc9879859aae7, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    m_Ints: {}
+    m_Floats:
+      _AlphaCutOff: 1
+      _Cull: 0
+      _Cutoff: 0.5
+      _DstBlend: 10
+      _GrayscaleAmbient: 0
+      _GroundTexIntensity: 2
+      _HitColorLerpRate: 0
+      _LightIntensity: 1
+      _LightThreshold: 0
+      _ShadowHeight: 0
+      _ShadowOffset: 0
+      _SrcBlend: 5
+      _Stencil: 2
+      _StencilComp: 6
+      _StencilOp: 0
+      _StencilReadMask: 255
+      _StencilWriteMask: 255
+      _TurnOnGroundColor: 0
+      _ZTest: 4
+    m_Colors:
+      _Color: {r: 1, g: 1, b: 1, a: 1}
+      _HitColor: {r: 1, g: 1, b: 1, a: 1}
+      _ShadowCol: {r: 0, g: 0, b: 0, a: 1}
+      _ShadowColor: {r: 0, g: 0, b: 0, a: 1}
+  m_BuildTextureStacks: []

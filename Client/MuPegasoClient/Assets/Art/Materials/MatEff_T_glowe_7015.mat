@@ -1,0 +1,53 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!21 &2100000
+Material:
+  serializedVersion: 8
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: MatEff_T_glowe_7015
+  m_Shader: {fileID: 4800000, guid: d19323f86c21b65478cc6b139388c6d3, type: 3}
+  m_Parent: {fileID: 0}
+  m_ModifiedSerializedProperties: 0
+  m_ValidKeywords: []
+  m_InvalidKeywords: []
+  m_LightmapFlags: 4
+  m_EnableInstancingVariants: 0
+  m_DoubleSidedGI: 0
+  m_CustomRenderQueue: -1
+  stringTagMap: {}
+  disabledShaderPasses: []
+  m_LockedProperties:
+  m_SavedProperties:
+    serializedVersion: 3
+    m_TexEnvs:
+      _MainTex:
+        m_Texture: {fileID: 2800000, guid: 8d1f9820d28032f4a974c5525e21127e, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    m_Ints: {}
+    m_Floats:
+      _ALPHAASMASK: 0
+      _Cull: 0
+      _DstBlend: 1
+      _InvFade: 0.01
+      _SEQUENCE_ON: 0
+      _ScaleModel: 1
+      _SequenceSpeed: 1
+      _Sequence_X: 1
+      _Sequence_Y: 1
+      _SrcBlend: 5
+      _color_insten: 1
+      _noise_ang: 0
+      _noise_insten: 0
+      _noise_u: 0
+      _noise_v: 0
+      _tex_u: 0
+      _tex_v: 0
+    m_Colors:
+      _FlowFactor: {r: 8, g: 0, b: 0, a: 0}
+      _TintColor: {r: 1, g: 1, b: 1, a: 1}
+      _tex_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_BuildTextureStacks: []

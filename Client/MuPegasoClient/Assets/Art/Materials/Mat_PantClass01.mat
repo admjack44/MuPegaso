@@ -1,0 +1,73 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!21 &2100000
+Material:
+  serializedVersion: 8
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: Mat_PantClass01
+  m_Shader: {fileID: 4800000, guid: 272704bfd76426246a65175aeaa7a9bc, type: 3}
+  m_Parent: {fileID: 0}
+  m_ModifiedSerializedProperties: 0
+  m_ValidKeywords: []
+  m_InvalidKeywords: []
+  m_LightmapFlags: 4
+  m_EnableInstancingVariants: 0
+  m_DoubleSidedGI: 0
+  m_CustomRenderQueue: -1
+  stringTagMap: {}
+  disabledShaderPasses: []
+  m_LockedProperties:
+  m_SavedProperties:
+    serializedVersion: 3
+    m_TexEnvs:
+      _MainTex:
+        m_Texture: {fileID: 2800000, guid: 05954061fc5815e4284ef169bf0b27b5, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    m_Ints: {}
+    m_Floats:
+      _AlphaCutOff: 0
+      _Cull: 2
+      _Cutoff: 0
+      _DstBlend: 10
+      _Duration: 0.1
+      _FlowDuration: 0.1
+      _FlowIntensity: 1
+      _FlowIntensity2: 1
+      _FlowPower: 1
+      _GroundTexIntensity: 2
+      _HitColorLerpRate: 0
+      _LightIntensity: 1
+      _LightIntensity2: 1
+      _LightIntensityDuration: 1
+      _LightThreshold: 1
+      _Specular: 1
+      _SpecularIntensity2: 8
+      _SpecularPower: 0
+      _SpecularPower2: 40
+      _SrcBlend: 5
+      _Stencil: 2
+      _StencilComp: 6
+      _TurnOnGroundColor: 0
+      _ZTest: 4
+      _ZWrite: 1
+      _fanwei: 1
+      _node_5933: 10.6
+      _qiangdu: 1.46
+    m_Colors:
+      _Color: {r: 1, g: 1, b: 1, a: 1}
+      _Color1: {r: 1, g: 1, b: 1, a: 1}
+      _Color2: {r: 1, g: 1, b: 1, a: 1}
+      _Color_fresnel: {r: 0.336833, g: 0.35501027, b: 1.0057547, a: 1}
+      _Color_tex: {r: 0.19490923, g: 0.19490923, b: 0.5660378, a: 1}
+      _DucShaderLightDir: {r: 1, g: 1, b: 1, a: 1}
+      _FlowColor1: {r: 0, g: 0.0075545628, b: 0.8113208, a: 1}
+      _FlowColor2: {r: 1, g: 1, b: 1, a: 1}
+      _FlowSpeed: {r: 1, g: 1, b: 1, a: 1}
+      _FlowTex2Color: {r: 1, g: 1, b: 1, a: 1}
+      _HitColor: {r: 1, g: 1, b: 1, a: 1}
+      _PointLightPos: {r: 1, g: 1, b: 1, a: 1}
+  m_BuildTextureStacks: []
