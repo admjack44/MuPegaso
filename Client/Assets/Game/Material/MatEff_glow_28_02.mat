@@ -1,0 +1,118 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!21 &2100000
+Material:
+  serializedVersion: 8
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: MatEff_glow_28_02
+  m_Shader: {fileID: 4800000, guid: ee628181a058d58499dfa7d6d955be71, type: 3}
+  m_Parent: {fileID: 0}
+  m_ModifiedSerializedProperties: 0
+  m_ValidKeywords: []
+  m_InvalidKeywords:
+  - GroundColor
+  - _MAIN_ON
+  m_LightmapFlags: 4
+  m_EnableInstancingVariants: 0
+  m_DoubleSidedGI: 0
+  m_CustomRenderQueue: -1
+  stringTagMap: {}
+  disabledShaderPasses: []
+  m_LockedProperties:
+  m_SavedProperties:
+    serializedVersion: 3
+    m_TexEnvs:
+      _MainTex:
+        m_Texture: {fileID: 2800000, guid: 8aca7506cb78cd3458f42b9beebd3f91, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+      _MaskTex:
+        m_Texture: {fileID: 2800000, guid: a583af2ef82fbef4c8744123579611b4, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: -0.01, y: 0}
+    m_Ints: {}
+    m_Floats:
+      _ALPHAASMASK: 0
+      _AlphaCutOff: 0
+      _AlphaCutoffIntensity: 0.422
+      _ColorMask: 15
+      _Cull: 0
+      _CullMode: 0
+      _Cutoff: 0.5
+      _DestBlend: 1
+      _DissolveEdge: 0
+      _DissolveIntensity: 0
+      _DissolveMode: 0
+      _DistortionIntensity: 0
+      _DistortionSpeedU: 0
+      _DistortionSpeedV: 0
+      _DstBlend: 1
+      _Duration: 0.1
+      _FlowDuration: 0.1
+      _FlowIntensity: 1
+      _FlowIntensity2: 1
+      _FlowPower: 1
+      _Frenquece: 1
+      _Fresnel: 0
+      _FresnelExp: 1
+      _FresnelIntesity: 1
+      _GroundTexIntensity: 2
+      _Intensity: 0.85
+      _InvFade: 1
+      _LightIntensity: 1
+      _LightIntensity2: 1
+      _LightIntensityDuration: 1
+      _LightThreshold: 0
+      _Main: 1
+      _MainSpeedU: -0.7
+      _MainSpeedV: 0
+      _MainUVMode: 0
+      _MaskAlphaCutoffIntensity: 0
+      _MaskFor: 0
+      _MaskSpeedU: 0
+      _MaskSpeedV: 0
+      _MaskUVMode: 0
+      _PartFlick: 0
+      _SEQUENCE_ON: 0
+      _ScaleModel: 1
+      _SequenceSpeed: 1
+      _Sequence_X: 1
+      _Sequence_Y: 1
+      _ShadowOffset: 0
+      _Specular: 1
+      _SpecularIntensity2: 8
+      _SpecularPower: 0
+      _SpecularPower2: 40
+      _SrcBlend: 5
+      _Stencil: 0
+      _StencilComp: 8
+      _StencilOp: 0
+      _StencilReadMask: 255
+      _StencilWriteMask: 255
+      _TurnOnGroundColor: 1
+      _ZTest: 4
+      _ZWrite: 0
+      _Zoffset: 0
+      _u: 0
+      _u2: 0
+      _v: 0.2
+      _v2: 0.5
+    m_Colors:
+      _Color: {r: 0.5, g: 0.5, b: 0.5, a: 0.5}
+      _Color1: {r: 1, g: 1, b: 1, a: 1}
+      _Color2: {r: 1, g: 1, b: 1, a: 1}
+      _DissolveColor: {r: 1, g: 1, b: 1, a: 1}
+      _FlickColor: {r: 1, g: 1, b: 1, a: 1}
+      _FlowColor1: {r: 1, g: 1, b: 1, a: 1}
+      _FlowColor2: {r: 1, g: 1, b: 1, a: 1}
+      _FlowFactor: {r: 0, g: 0.2, b: 0, a: 0}
+      _FlowSpeed: {r: 1, g: 1, b: 1, a: 1}
+      _FlowTex2Color: {r: 1, g: 1, b: 1, a: 1}
+      _FresnelColor: {r: 0.5, g: 0.5, b: 0.5, a: 0.5}
+      _ParicleTintColor: {r: 0.4716981, g: 0.42497328, b: 0.42497328, a: 1}
+      _ShadowColor: {r: 0, g: 0, b: 0, a: 1}
+      _TintColor: {r: 0.8207547, g: 0.63675535, b: 0.2516465, a: 0.9843137}
+  m_BuildTextureStacks: []

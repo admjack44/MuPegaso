@@ -1,0 +1,60 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!21 &2100000
+Material:
+  serializedVersion: 8
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: Terrain_Dynamic
+  m_Shader: {fileID: 4800000, guid: 963fb3789084d5548aa3420b622a6227, type: 3}
+  m_Parent: {fileID: 0}
+  m_ModifiedSerializedProperties: 0
+  m_ValidKeywords:
+  - GroundColor
+  - HOLLOWON
+  m_InvalidKeywords: []
+  m_LightmapFlags: 4
+  m_EnableInstancingVariants: 0
+  m_DoubleSidedGI: 0
+  m_CustomRenderQueue: -1
+  stringTagMap: {}
+  disabledShaderPasses: []
+  m_LockedProperties:
+  m_SavedProperties:
+    serializedVersion: 3
+    m_TexEnvs:
+      _ControlTex:
+        m_Texture: {fileID: 2800000, guid: 71a01cc643cfaae4683c2ea300154b27, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+      _HollowMap:
+        m_Texture: {fileID: 2800000, guid: 15b6f542de3a836459f37a200fb7bf9b, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+      _MainTex:
+        m_Texture: {fileID: 18700000, guid: 93d7cbba370807d4baf7d9919a34e17a, type: 3}
+        m_Scale: {x: 128, y: 128}
+        m_Offset: {x: 0, y: 0}
+      _WeightArr:
+        m_Texture: {fileID: 18700000, guid: df4de9f5834930d418bdf4fb5c8e5215, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    m_Ints: {}
+    m_Floats:
+      _GroundTexIntensity: 1.5
+      _HeightMapScale: 1
+      _HeightMapScale_MinY: 0
+      _HollowMapOn: 1
+      _TurnOnGroundColor: 1
+      _WaterFlowCutOff: 0.15
+      _WaterIndex: -1
+      _WaterOn: 0
+    m_Colors:
+      _MapSize: {r: 256, g: 256, b: 4.1, a: -0.13}
+      _TilingMap0: {r: 1, g: 1, b: 1, a: 1}
+      _TilingMap1: {r: 1, g: 1, b: 1, a: 1}
+      _TilingMap2: {r: 1, g: 1, b: 1, a: 1}
+      _TilingMap3: {r: 1, g: 1, b: 1, a: 1}
+  m_BuildTextureStacks: []

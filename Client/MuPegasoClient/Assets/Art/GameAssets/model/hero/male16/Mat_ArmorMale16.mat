@@ -1,0 +1,88 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!21 &2100000
+Material:
+  serializedVersion: 8
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: Mat_ArmorMale16
+  m_Shader: {fileID: 4800000, guid: bf01134a58ac3224cb5fc80102ffa128, type: 3}
+  m_Parent: {fileID: 0}
+  m_ModifiedSerializedProperties: 0
+  m_ValidKeywords: []
+  m_InvalidKeywords: []
+  m_LightmapFlags: 4
+  m_EnableInstancingVariants: 0
+  m_DoubleSidedGI: 0
+  m_CustomRenderQueue: -1
+  stringTagMap: {}
+  disabledShaderPasses: []
+  m_LockedProperties:
+  m_SavedProperties:
+    serializedVersion: 3
+    m_TexEnvs:
+      _MainTex:
+        m_Texture: {fileID: 2800000, guid: 9648a75e4d6d1b54baa1f981e0cc2205, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+      _Streamer:
+        m_Texture: {fileID: 2800000, guid: 91212f9a9a3d3a54d86e89960b2c1b32, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    m_Ints: {}
+    m_Floats:
+      _AlphaCutOff: 0
+      _Bottom: 0
+      _BumpScale: 1
+      _Cull: 2
+      _Cutoff: 0
+      _DetailNormalMapScale: 1
+      _DstBlend: 0
+      _Duration: 0.2
+      _FlowDuration: 0.2
+      _FlowIntensity: 1.2
+      _FlowIntensity2: 1
+      _FlowPower: 1.5
+      _GlossMapScale: 1
+      _Glossiness: 0
+      _GlossyReflections: 1
+      _GroundTexIntensity: 2
+      _HitColorLerpRate: 0
+      _LightIntensity: 1
+      _LightThreshold: 0
+      _Limits: 2
+      _Metallic: 0
+      _Mode: 0
+      _MoreLevelSweep: 0
+      _OcclusionStrength: 1
+      _Parallax: 0.02
+      _Power: 1
+      _RotateSpeed: 0.5
+      _SmoothnessTextureChannel: 0
+      _SpecularHighlights: 1
+      _SpecularIntensity2: 8
+      _SpecularPower2: 40
+      _SrcBlend: 1
+      _Stencil: 2
+      _StencilComp: 6
+      _TurnOnGroundColor: 0
+      _UVSec: 0
+      _ZTest: 4
+      _ZWrite: 1
+      _useLight: 1
+    m_Colors:
+      _Color: {r: 1, g: 1, b: 1, a: 1}
+      _Color1: {r: 1, g: 1, b: 1, a: 1}
+      _Color2: {r: 1, g: 1, b: 1, a: 1}
+      _Color_fresnel: {r: 1, g: 1, b: 1, a: 1}
+      _Color_tex: {r: 1, g: 1, b: 1, a: 1}
+      _DucShaderLightDir: {r: 1, g: 1, b: 1, a: 1}
+      _EmissionColor: {r: 0, g: 0, b: 0, a: 0}
+      _FlowColor1: {r: 1, g: 1, b: 1, a: 1}
+      _FlowSpeed: {r: -4, g: 4, b: 1, a: 1}
+      _FlowTexColor2: {r: 0.31132078, g: 0.18815677, b: 0.024964407, a: 1}
+      _HitColor: {r: 1, g: 1, b: 1, a: 1}
+      _PointLightPos: {r: 1, g: 1, b: 1, a: 1}
+  m_BuildTextureStacks: []
