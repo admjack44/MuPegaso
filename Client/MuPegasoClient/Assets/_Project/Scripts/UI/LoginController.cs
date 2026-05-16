@@ -2,190 +2,322 @@ using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
 using UnityEngine.Video;
+using UnityEngine.SceneManagement;
 
 namespace MuPegaso.Client.UI
 {
     public class LoginController : MonoBehaviour
     {
-        [Header("Video Background")]
-        [SerializeField] private VideoPlayer videoPlayer;
-        [SerializeField] private RawImage    videoBackground;
+        const string SelectServerScene = "SelectServer";
 
-        [Header("Login Buttons")]
-        [SerializeField] private Button btnGoogle;
-        [SerializeField] private Button btnFacebook;
-        [SerializeField] private Button btnApple;
-        [SerializeField] private Button btnGuest;
-        [SerializeField] private Button btnAccount;
+        Canvas _canvas;
 
-        [Header("Panel Cuenta")]
-        [SerializeField] private GameObject      panelAccount;
-        [SerializeField] private GameObject      panelLoginForm;
-        [SerializeField] private GameObject      panelRegisterForm;
-        [SerializeField] private GameObject      panelRecoverForm;
-        [SerializeField] private Button          tabLogin;
-        [SerializeField] private Button          tabRegister;
-        [SerializeField] private Button          tabRecover;
-        [SerializeField] private Button          btnCloseAccount;
-        [SerializeField] private TMP_InputField  inputUser;
-        [SerializeField] private TMP_InputField  inputPass;
-        [SerializeField] private TMP_InputField  inputRegUser;
-        [SerializeField] private TMP_InputField  inputRegEmail;
-        [SerializeField] private TMP_InputField  inputRegPass;
-        [SerializeField] private TMP_InputField  inputRegPass2;
-        [SerializeField] private TMP_InputField  inputRecEmail;
-        [SerializeField] private Button          btnLoginAccount;
-        [SerializeField] private Button          btnRegisterAccount;
-        [SerializeField] private Button          btnRecoverAccount;
-        [SerializeField] private TextMeshProUGUI formStatus;
+        VideoPlayer _videoPlayer;
+        RawImage _videoBackground;
 
-        [SerializeField] private TextMeshProUGUI statusText;
+        TextMeshProUGUI _statusText;
+
+        GameObject _panelAccount;
+        Button _btnClose;
+        Button _tabLogin;
+        Button _tabRegister;
+        Button _tabRecover;
+        GameObject _panelLoginForm;
+        GameObject _panelRegisterForm;
+        GameObject _panelRecoverForm;
+        TMP_InputField _inputUser;
+        TMP_InputField _inputPass;
+        TMP_InputField _inputRegUser;
+        TMP_InputField _inputRegEmail;
+        TMP_InputField _inputRegPass;
+        TMP_InputField _inputRegPass2;
+        TMP_InputField _inputRecEmail;
+        Button _btnLoginAccount;
+        Button _btnRegisterAccount;
+        Button _btnRecoverAccount;
+        TextMeshProUGUI _formStatus;
 
         void Start()
         {
+            Debug.Log("LoginController Start OK");
+
+            if (!BindReferences())
+                return;
+
+            BindLoginButtons();
             SetupVideo();
-            panelAccount.SetActive(false);
 
-            btnGoogle.onClick.AddListener(OnGoogleLogin);
-            btnFacebook.onClick.AddListener(OnFacebookLogin);
-            btnApple.onClick.AddListener(OnAppleLogin);
-            btnGuest.onClick.AddListener(OnGuestLogin);
-            btnAccount.onClick.AddListener(() =>
+            if (_panelAccount != null)
+                _panelAccount.SetActive(false);
+
+            if (_btnClose != null)
+                _btnClose.onClick.AddListener(CloseAccountPanel);
+
+            if (_tabLogin != null)
+                _tabLogin.onClick.AddListener(() => ShowTab("login"));
+            if (_tabRegister != null)
+                _tabRegister.onClick.AddListener(() => ShowTab("register"));
+            if (_tabRecover != null)
+                _tabRecover.onClick.AddListener(() => ShowTab("recover"));
+
+            if (_btnLoginAccount != null)
+                _btnLoginAccount.onClick.AddListener(OnFormLogin);
+            if (_btnRegisterAccount != null)
+                _btnRegisterAccount.onClick.AddListener(OnRegister);
+            if (_btnRecoverAccount != null)
+                _btnRecoverAccount.onClick.AddListener(OnRecover);
+
+            if (_statusText != null)
+                _statusText.text = "";
+            if (_formStatus != null)
+                _formStatus.text = "";
+        }
+
+        bool BindReferences()
+        {
+            _canvas = FindObjectOfType<Canvas>();
+            if (_canvas == null)
             {
-                panelAccount.SetActive(true);
-                ShowTab("login");
-            });
+                Debug.LogError("[Login] No se encontró Canvas.");
+                return false;
+            }
 
-            btnCloseAccount.onClick.AddListener(() => panelAccount.SetActive(false));
-            tabLogin.onClick.AddListener(() => ShowTab("login"));
-            tabRegister.onClick.AddListener(() => ShowTab("register"));
-            tabRecover.onClick.AddListener(() => ShowTab("recover"));
+            var canvasTransform = _canvas.transform;
 
-            btnLoginAccount.onClick.AddListener(OnAccountLogin);
-            btnRegisterAccount.onClick.AddListener(OnRegister);
-            btnRecoverAccount.onClick.AddListener(OnRecover);
+            _panelAccount = canvasTransform.Find("Panel_Account")?.gameObject;
 
-            statusText.text = "";
-            formStatus.text = "";
+            _statusText = FindText("Panel_Login/Text_Status");
+            if (_statusText == null)
+                _statusText = FindText("Text_Status");
+            _btnClose = FindButton("Panel_Account/Btn_Close");
+            _tabLogin = FindButton("Panel_Account/Panel_Tabs/Tab_Login");
+            _tabRegister = FindButton("Panel_Account/Panel_Tabs/Tab_Register");
+            _tabRecover = FindButton("Panel_Account/Panel_Tabs/Tab_Recover");
+
+            _panelLoginForm = FindObject("Panel_Account/Panel_Login_Form");
+            _panelRegisterForm = FindObject("Panel_Account/Panel_Register_Form");
+            _panelRecoverForm = FindObject("Panel_Account/Panel_Recover_Form");
+
+            _inputUser = FindInput("Panel_Account/Panel_Login_Form/Input_User");
+            _inputPass = FindInput("Panel_Account/Panel_Login_Form/Input_Pass");
+            _btnLoginAccount = FindButton("Panel_Account/Panel_Login_Form/Btn_Login_Account");
+            if (_btnLoginAccount == null)
+                _btnLoginAccount = FindButton("Panel_Account/Panel_Login_Form/Btn_Login");
+
+            _inputRegUser = FindInput("Panel_Account/Panel_Register_Form/Input_RegUser");
+            _inputRegEmail = FindInput("Panel_Account/Panel_Register_Form/Input_RegEmail");
+            _inputRegPass = FindInput("Panel_Account/Panel_Register_Form/Input_RegPass");
+            _inputRegPass2 = FindInput("Panel_Account/Panel_Register_Form/Input_RegPass2");
+            _btnRegisterAccount = FindButton("Panel_Account/Panel_Register_Form/Btn_Register_Account");
+            if (_btnRegisterAccount == null)
+                _btnRegisterAccount = FindButton("Panel_Account/Panel_Register_Form/Btn_Register");
+
+            _inputRecEmail = FindInput("Panel_Account/Panel_Recover_Form/Input_RecEmail");
+            _btnRecoverAccount = FindButton("Panel_Account/Panel_Recover_Form/Btn_Recover_Account");
+            if (_btnRecoverAccount == null)
+                _btnRecoverAccount = FindButton("Panel_Account/Panel_Recover_Form/Btn_Recover");
+
+            _formStatus = FindText("Panel_Account/Text_FormStatus");
+
+            var videoGo = GameObject.Find("VideoPlayer");
+            if (videoGo != null)
+                _videoPlayer = videoGo.GetComponent<VideoPlayer>();
+
+            _videoBackground = canvasTransform.Find("BG_Video")?.GetComponent<RawImage>();
+
+            LogMissing(_panelAccount, "Panel_Account");
+            LogMissing(_btnClose, "Btn_Close");
+
+            return _canvas != null && _panelAccount != null;
         }
 
-        void ShowTab(string tab)
+        void BindLoginButtons()
         {
-            panelLoginForm.SetActive(tab == "login");
-            panelRegisterForm.SetActive(tab == "register");
-            panelRecoverForm.SetActive(tab == "recover");
-            formStatus.text = "";
-
-            var active = new Color32(200, 164, 0, 255);
-            var inactive = new Color32(51, 51, 51, 255);
-            SetTabVisual(tabLogin, tab == "login", active, inactive);
-            SetTabVisual(tabRegister, tab == "register", active, inactive);
-            SetTabVisual(tabRecover, tab == "recover", active, inactive);
+            var allButtons = FindObjectsByType<Button>(FindObjectsSortMode.None);
+            foreach (var btn in allButtons)
+            {
+                switch (btn.gameObject.name)
+                {
+                    case "Btn_Google":
+                        btn.onClick.AddListener(() => SceneManager.LoadScene("SelectServer"));
+                        Debug.Log("Btn_Google asignado");
+                        break;
+                    case "Btn_Facebook":
+                        btn.onClick.AddListener(() => SceneManager.LoadScene("SelectServer"));
+                        Debug.Log("Btn_Facebook asignado");
+                        break;
+                    case "Btn_Apple":
+                        btn.onClick.AddListener(() => SceneManager.LoadScene("SelectServer"));
+                        Debug.Log("Btn_Apple asignado");
+                        break;
+                    case "Btn_Guest":
+                        btn.onClick.AddListener(() => SceneManager.LoadScene("SelectServer"));
+                        Debug.Log("Btn_Guest asignado");
+                        break;
+                    case "Btn_Account":
+                        btn.onClick.AddListener(OnAccountClicked);
+                        Debug.Log("Btn_Account asignado");
+                        break;
+                }
+            }
         }
 
-        static void SetTabVisual(Button b, bool on, Color32 active, Color32 inactive)
+        static void LogMissing(Object obj, string name)
         {
-            if (b == null) return;
-            var img = b.targetGraphic as Image;
-            if (img != null) img.color = on ? active : inactive;
+            if (obj == null)
+                Debug.LogWarning($"[Login] No encontrado: {name}");
+        }
+
+        Button FindButton(string path)
+        {
+            return _canvas.transform.Find(path)?.GetComponent<Button>();
+        }
+
+        TMP_InputField FindInput(string path)
+        {
+            return _canvas.transform.Find(path)?.GetComponent<TMP_InputField>();
+        }
+
+        TextMeshProUGUI FindText(string path)
+        {
+            return _canvas.transform.Find(path)?.GetComponent<TextMeshProUGUI>();
+        }
+
+        GameObject FindObject(string path)
+        {
+            return _canvas.transform.Find(path)?.gameObject;
         }
 
         void SetupVideo()
         {
-            if (videoPlayer == null || videoBackground == null) return;
-            videoPlayer.isLooping   = true;
-            videoPlayer.playOnAwake = true;
-            if (videoPlayer.targetTexture == null)
+            if (_videoPlayer == null || _videoBackground == null)
+                return;
+
+            _videoPlayer.isLooping = true;
+            _videoPlayer.playOnAwake = true;
+
+            if (_videoPlayer.targetTexture == null)
             {
                 var rt = new RenderTexture(1920, 1080, 24);
-                videoPlayer.targetTexture = rt;
-                videoBackground.texture   = rt;
+                _videoPlayer.targetTexture = rt;
+                _videoBackground.texture = rt;
             }
             else
-                videoBackground.texture = videoPlayer.targetTexture;
-            videoPlayer.Play();
+            {
+                _videoBackground.texture = _videoPlayer.targetTexture;
+            }
+
+            _videoPlayer.Play();
         }
 
-        void OnGoogleLogin()
+        void OnAccountClicked()
         {
-            statusText.text = "Conectando con Google...";
-            Debug.Log("[Login] Google");
+            _panelAccount.SetActive(true);
+            ShowTab("login");
         }
 
-        void OnFacebookLogin()
+        void CloseAccountPanel()
         {
-            statusText.text = "Conectando con Facebook...";
-            Debug.Log("[Login] Facebook");
+            _panelAccount.SetActive(false);
+            if (_formStatus != null)
+                _formStatus.text = "";
         }
 
-        void OnAppleLogin()
+        void ShowTab(string tab)
         {
-            statusText.text = "Conectando con Apple...";
-            Debug.Log("[Login] Apple");
+            if (_panelLoginForm != null)
+                _panelLoginForm.SetActive(tab == "login");
+            if (_panelRegisterForm != null)
+                _panelRegisterForm.SetActive(tab == "register");
+            if (_panelRecoverForm != null)
+                _panelRecoverForm.SetActive(tab == "recover");
+            if (_formStatus != null)
+                _formStatus.text = "";
+
+            var active = new Color32(200, 164, 0, 255);
+            var inactive = new Color32(51, 51, 51, 255);
+            SetTabVisual(_tabLogin, tab == "login", active, inactive);
+            SetTabVisual(_tabRegister, tab == "register", active, inactive);
+            SetTabVisual(_tabRecover, tab == "recover", active, inactive);
         }
 
-        void OnGuestLogin()
+        static void SetTabVisual(Button button, bool isOn, Color32 active, Color32 inactive)
         {
-            statusText.text = "Entrando como invitado...";
-            Debug.Log("[Login] Guest");
-            string guestId = "guest_" + SystemInfo.deviceUniqueIdentifier.Substring(0, 8);
-            SendLoginRequest(guestId, "guest");
+            if (button == null)
+                return;
+            var image = button.targetGraphic as Image;
+            if (image != null)
+                image.color = isOn ? active : inactive;
         }
 
-        void OnAccountLogin()
+        void OnFormLogin()
         {
-            string user = inputUser.text.Trim();
-            string pass = inputPass.text;
+            if (_inputUser == null || _inputPass == null)
+                return;
+
+            var user = _inputUser.text.Trim();
+            var pass = _inputPass.text;
             if (string.IsNullOrEmpty(user) || string.IsNullOrEmpty(pass))
             {
-                formStatus.text = "Completa usuario y contraseña";
+                if (_formStatus != null)
+                    _formStatus.text = "Completa usuario y contraseña";
                 return;
             }
-            btnLoginAccount.interactable = false;
-            formStatus.text = "Verificando...";
-            SendLoginRequest(user, pass);
+
+            if (_btnLoginAccount != null)
+                _btnLoginAccount.interactable = false;
+            if (_formStatus != null)
+                _formStatus.text = "Verificando...";
+
+            Debug.Log($"[Login] Cuenta: {user}");
+            SceneManager.LoadScene(SelectServerScene);
         }
 
         void OnRegister()
         {
-            string user  = inputRegUser.text.Trim();
-            string email = inputRegEmail.text.Trim();
-            string pass  = inputRegPass.text;
-            string pass2 = inputRegPass2.text;
+            if (_inputRegUser == null || _inputRegEmail == null || _inputRegPass == null || _inputRegPass2 == null)
+                return;
 
-            if (string.IsNullOrEmpty(user) || string.IsNullOrEmpty(email) ||
-                string.IsNullOrEmpty(pass))
+            var user = _inputRegUser.text.Trim();
+            var email = _inputRegEmail.text.Trim();
+            var pass = _inputRegPass.text;
+            var pass2 = _inputRegPass2.text;
+
+            if (string.IsNullOrEmpty(user) || string.IsNullOrEmpty(email) || string.IsNullOrEmpty(pass))
             {
-                formStatus.text = "Completa todos los campos";
+                if (_formStatus != null)
+                    _formStatus.text = "Completa todos los campos";
                 return;
             }
 
             if (pass != pass2)
             {
-                formStatus.text = "Las contraseñas no coinciden";
+                if (_formStatus != null)
+                    _formStatus.text = "Las contraseñas no coinciden";
                 return;
             }
 
-            formStatus.text = "Creando cuenta...";
+            if (_formStatus != null)
+                _formStatus.text = "Creando cuenta...";
             Debug.Log($"[Register] {user} / {email}");
         }
 
         void OnRecover()
         {
-            string email = inputRecEmail.text.Trim();
+            if (_inputRecEmail == null)
+                return;
+
+            var email = _inputRecEmail.text.Trim();
             if (string.IsNullOrEmpty(email))
             {
-                formStatus.text = "Ingresa tu email";
+                if (_formStatus != null)
+                    _formStatus.text = "Ingresa tu email";
                 return;
             }
 
-            formStatus.text = "Enviando código...";
+            if (_formStatus != null)
+                _formStatus.text = "Enviando código...";
             Debug.Log($"[Recover] {email}");
-        }
-
-        void SendLoginRequest(string user, string pass)
-        {
-            Debug.Log($"[Login] Enviando request: {user}");
         }
     }
 }
