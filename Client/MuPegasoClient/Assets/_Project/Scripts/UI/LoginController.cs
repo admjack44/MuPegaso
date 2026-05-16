@@ -20,11 +20,25 @@ namespace MuPegaso.Client.UI
 
         [Header("Panel Cuenta")]
         [SerializeField] private GameObject      panelAccount;
+        [SerializeField] private GameObject      panelLoginForm;
+        [SerializeField] private GameObject      panelRegisterForm;
+        [SerializeField] private GameObject      panelRecoverForm;
+        [SerializeField] private Button          tabLogin;
+        [SerializeField] private Button          tabRegister;
+        [SerializeField] private Button          tabRecover;
+        [SerializeField] private Button          btnCloseAccount;
         [SerializeField] private TMP_InputField  inputUser;
         [SerializeField] private TMP_InputField  inputPass;
-        [SerializeField] private Button          btnLogin;
-        [SerializeField] private Button          btnRegister;
-        [SerializeField] private Button          btnClosePanel;
+        [SerializeField] private TMP_InputField  inputRegUser;
+        [SerializeField] private TMP_InputField  inputRegEmail;
+        [SerializeField] private TMP_InputField  inputRegPass;
+        [SerializeField] private TMP_InputField  inputRegPass2;
+        [SerializeField] private TMP_InputField  inputRecEmail;
+        [SerializeField] private Button          btnLoginAccount;
+        [SerializeField] private Button          btnRegisterAccount;
+        [SerializeField] private Button          btnRecoverAccount;
+        [SerializeField] private TextMeshProUGUI formStatus;
+
         [SerializeField] private TextMeshProUGUI statusText;
 
         void Start()
@@ -36,10 +50,44 @@ namespace MuPegaso.Client.UI
             btnFacebook.onClick.AddListener(OnFacebookLogin);
             btnApple.onClick.AddListener(OnAppleLogin);
             btnGuest.onClick.AddListener(OnGuestLogin);
-            btnAccount.onClick.AddListener(() => panelAccount.SetActive(true));
-            btnClosePanel.onClick.AddListener(() => panelAccount.SetActive(false));
-            btnLogin.onClick.AddListener(OnAccountLogin);
-            btnRegister.onClick.AddListener(OnRegister);
+            btnAccount.onClick.AddListener(() =>
+            {
+                panelAccount.SetActive(true);
+                ShowTab("login");
+            });
+
+            btnCloseAccount.onClick.AddListener(() => panelAccount.SetActive(false));
+            tabLogin.onClick.AddListener(() => ShowTab("login"));
+            tabRegister.onClick.AddListener(() => ShowTab("register"));
+            tabRecover.onClick.AddListener(() => ShowTab("recover"));
+
+            btnLoginAccount.onClick.AddListener(OnAccountLogin);
+            btnRegisterAccount.onClick.AddListener(OnRegister);
+            btnRecoverAccount.onClick.AddListener(OnRecover);
+
+            statusText.text = "";
+            formStatus.text = "";
+        }
+
+        void ShowTab(string tab)
+        {
+            panelLoginForm.SetActive(tab == "login");
+            panelRegisterForm.SetActive(tab == "register");
+            panelRecoverForm.SetActive(tab == "recover");
+            formStatus.text = "";
+
+            var active = new Color32(200, 164, 0, 255);
+            var inactive = new Color32(51, 51, 51, 255);
+            SetTabVisual(tabLogin, tab == "login", active, inactive);
+            SetTabVisual(tabRegister, tab == "register", active, inactive);
+            SetTabVisual(tabRecover, tab == "recover", active, inactive);
+        }
+
+        static void SetTabVisual(Button b, bool on, Color32 active, Color32 inactive)
+        {
+            if (b == null) return;
+            var img = b.targetGraphic as Image;
+            if (img != null) img.color = on ? active : inactive;
         }
 
         void SetupVideo()
@@ -62,21 +110,18 @@ namespace MuPegaso.Client.UI
         {
             statusText.text = "Conectando con Google...";
             Debug.Log("[Login] Google");
-            // TODO: Google Play Games SDK
         }
 
         void OnFacebookLogin()
         {
             statusText.text = "Conectando con Facebook...";
             Debug.Log("[Login] Facebook");
-            // TODO: Facebook SDK
         }
 
         void OnAppleLogin()
         {
             statusText.text = "Conectando con Apple...";
             Debug.Log("[Login] Apple");
-            // TODO: Sign in with Apple
         }
 
         void OnGuestLogin()
@@ -93,24 +138,54 @@ namespace MuPegaso.Client.UI
             string pass = inputPass.text;
             if (string.IsNullOrEmpty(user) || string.IsNullOrEmpty(pass))
             {
-                statusText.text = "Completa usuario y contraseña";
+                formStatus.text = "Completa usuario y contraseña";
                 return;
             }
-            btnLogin.interactable = false;
-            statusText.text = "Verificando...";
+            btnLoginAccount.interactable = false;
+            formStatus.text = "Verificando...";
             SendLoginRequest(user, pass);
         }
 
         void OnRegister()
         {
-            Debug.Log("[Login] Abrir registro");
-            // TODO: SceneManager.LoadScene("Register")
+            string user  = inputRegUser.text.Trim();
+            string email = inputRegEmail.text.Trim();
+            string pass  = inputRegPass.text;
+            string pass2 = inputRegPass2.text;
+
+            if (string.IsNullOrEmpty(user) || string.IsNullOrEmpty(email) ||
+                string.IsNullOrEmpty(pass))
+            {
+                formStatus.text = "Completa todos los campos";
+                return;
+            }
+
+            if (pass != pass2)
+            {
+                formStatus.text = "Las contraseñas no coinciden";
+                return;
+            }
+
+            formStatus.text = "Creando cuenta...";
+            Debug.Log($"[Register] {user} / {email}");
+        }
+
+        void OnRecover()
+        {
+            string email = inputRecEmail.text.Trim();
+            if (string.IsNullOrEmpty(email))
+            {
+                formStatus.text = "Ingresa tu email";
+                return;
+            }
+
+            formStatus.text = "Enviando código...";
+            Debug.Log($"[Recover] {email}");
         }
 
         void SendLoginRequest(string user, string pass)
         {
             Debug.Log($"[Login] Enviando request: {user}");
-            // TODO: NetworkClient.Instance.SendLogin(user, pass)
         }
     }
 }
