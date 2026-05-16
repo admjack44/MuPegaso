@@ -1,0 +1,64 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements" editor-extension-mode="False">
+  <Style src="SelectServer.uss" />
+  <ui:VisualElement name="root" class="select-server-root">
+    <ui:VisualElement name="background" picking-mode="Ignore">
+      <ui:VisualElement name="particles-host" picking-mode="Ignore" />
+    </ui:VisualElement>
+    <ui:VisualElement name="panel" picking-mode="Ignore">
+      <ui:VisualElement name="top-accent-line" picking-mode="Ignore" />
+      <ui:VisualElement name="scanline" picking-mode="Ignore" />
+      <ui:VisualElement name="corner-tl" picking-mode="Ignore" />
+      <ui:VisualElement name="corner-tr" picking-mode="Ignore" />
+      <ui:VisualElement name="corner-bl" picking-mode="Ignore" />
+      <ui:VisualElement name="corner-br" picking-mode="Ignore" />
+      <ui:VisualElement name="header">
+        <ui:VisualElement name="header-left">
+          <ui:VisualElement name="header-icon" picking-mode="Ignore" />
+          <ui:VisualElement name="header-text">
+            <ui:Label name="title" text="SELECCIONAR SERVIDOR" />
+            <ui:Label name="subtitle" text="ELIGE EL SERVIDOR AL QUE DESEAS CONECTARTE" />
+          </ui:VisualElement>
+        </ui:VisualElement>
+        <ui:Button name="close-btn" text="✕" />
+      </ui:VisualElement>
+      <ui:VisualElement name="body">
+        <ui:VisualElement name="sidebar">
+          <ui:Label name="label-recent" text="ACCESO RÁPIDO" />
+        <ui:Button name="btn-recent" text="Recientes" class="sidebar-btn" />
+        <ui:VisualElement name="divider" picking-mode="Ignore" />
+        <ui:Label name="label-groups" text="GRUPOS" />
+        <ui:Button name="btn-group-1" text="Grupo SV1" class="sidebar-btn" />
+        <ui:Button name="btn-group-2" text="Grupo SV2" class="sidebar-btn" />
+        <ui:Button name="btn-group-3" text="Grupo SV3" class="sidebar-btn" />
+        </ui:VisualElement>
+        <ui:VisualElement name="main">
+          <ui:VisualElement name="legend">
+            <ui:VisualElement name="leg-available" class="legend-row">
+              <ui:VisualElement name="dot-green" class="legend-dot dot-green dot-pulse" picking-mode="Ignore" />
+              <ui:Label text="Disponible" />
+            </ui:VisualElement>
+            <ui:VisualElement name="leg-full" class="legend-row">
+              <ui:VisualElement name="dot-red" class="legend-dot dot-red dot-pulse" picking-mode="Ignore" />
+              <ui:Label text="Lleno" />
+            </ui:VisualElement>
+            <ui:VisualElement name="leg-saturated" class="legend-row">
+              <ui:VisualElement name="dot-yellow" class="legend-dot dot-yellow dot-pulse" picking-mode="Ignore" />
+              <ui:Label text="Saturado" />
+            </ui:VisualElement>
+            <ui:VisualElement name="leg-maintenance" class="legend-row">
+              <ui:VisualElement name="dot-gray" class="legend-dot dot-gray" picking-mode="Ignore" />
+              <ui:Label text="Mantenimiento" />
+            </ui:VisualElement>
+          </ui:VisualElement>
+          <ui:ScrollView name="server-scroll">
+            <ui:VisualElement name="server-grid" />
+          </ui:ScrollView>
+        </ui:VisualElement>
+      </ui:VisualElement>
+      <ui:VisualElement name="footer">
+        <ui:Label name="footer-text" text="Ningún servidor seleccionado" />
+        <ui:Button name="connect-btn" text="CONECTAR ▶" />
+      </ui:VisualElement>
+    </ui:VisualElement>
+  </ui:VisualElement>
+</ui:UXML>
