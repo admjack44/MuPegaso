@@ -21,7 +21,11 @@ namespace MuPegaso.Client.Data
         public int groupId;
     }
 
-    /// <summary>Catálogo MU PEGASO con distribución por grupo.</summary>
+    /// <summary>
+    /// SV1: MU PEGASO 1–13 · SV2: 14–22 · SV3: 23–30.
+    /// El número más alto de cada grupo → Available + isNew.
+    /// Resto: ~60% Full, ~20% Saturated, ~20% Maintenance (con reparto exacto por grupo).
+    /// </summary>
     public static class ServerDataCatalog
     {
         public static List<ServerData> BuildDefault()

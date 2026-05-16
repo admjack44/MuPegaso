@@ -2,22 +2,32 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UIElements;
+using UnityEngine.Video;
 using MuPegaso.Client.Data;
 
 namespace MuPegaso.Client.UI
 {
+    /// <summary>Pantalla Select Server (UI Toolkit). Requiere UIDocument + SelectServer.uxml.</summary>
     [RequireComponent(typeof(UIDocument))]
     public class SelectServerController : MonoBehaviour
     {
         static readonly int[] RecentServerIds = { 21, 7 };
 
         [SerializeField] private UIDocument uiDocument;
-        [Tooltip("Opcional: si el UIDocument no tiene Source Asset, se asigna aquí (ej. SelectServer.uxml).")]
+        [Tooltip("Opcional: si el UIDocument no tiene Source Asset.")]
         [SerializeField] private VisualTreeAsset uiTreeAsset;
         [SerializeField] private List<ServerData> servers = new List<ServerData>();
         [SerializeField] private PanelSettings panelSettingsAsset;
         [SerializeField] private string gameSceneName = "Game";
         [SerializeField] private string closeSceneName = "Login";
+        [Tooltip("Opcional: fondo launcher. Si está vacío se intenta cargar desde Assets en Editor o Resources en runtime.")]
+        [SerializeField] private Texture2D backgroundTexture;
+
+        [SerializeField] private VideoPlayer videoPlayer;
+        [SerializeField] private RenderTexture videoRenderTexture;
+
+        [SerializeField] private AudioSource audioSource;
+        [SerializeField] private AudioClip loadingSound;
 
         private int selectedServerId = -1;
         private int currentGroup = 1;
@@ -47,6 +57,15 @@ namespace MuPegaso.Client.UI
 
         private readonly List<Particle> _particles = new List<Particle>();
 
+        static void StretchRootToFullScreen(VisualElement root)
+        {
+            if (root == null) return;
+            root.style.flexGrow = 1;
+            root.style.flexShrink = 0;
+            root.style.width = Length.Percent(100);
+            root.style.height = Length.Percent(100);
+        }
+
         private void Awake()
         {
             if (uiDocument == null)
@@ -57,6 +76,11 @@ namespace MuPegaso.Client.UI
 
             if (servers == null || servers.Count == 0)
                 servers = ServerDataCatalog.BuildDefault();
+
+            if (videoPlayer == null)
+                videoPlayer = GetComponent<VideoPlayer>();
+            if (audioSource == null)
+                audioSource = GetComponent<AudioSource>();
 
             EnsurePanelSettings();
         }
@@ -75,14 +99,29 @@ namespace MuPegaso.Client.UI
             var ps = ScriptableObject.CreateInstance<PanelSettings>();
             ps.scaleMode = PanelScaleMode.ScaleWithScreenSize;
             ps.referenceResolution = new Vector2Int(1920, 1080);
-            ps.screenMatchMode = ScreenMatchMode.MatchWidthOrHeight;
+            ps.screenMatchMode = PanelScreenMatchMode.MatchWidthOrHeight;
             ps.match = 0.5f;
             uiDocument.panelSettings = ps;
         }
 
         private void OnEnable()
         {
+            if (uiDocument == null)
+                uiDocument = GetComponent<UIDocument>();
+
+            if (uiDocument.panelSettings == null)
+                EnsurePanelSettings();
+
             var root = uiDocument.rootVisualElement;
+            StretchRootToFullScreen(root);
+            var shell = root.Q<VisualElement>("root");
+            if (shell != null && shell != root)
+                StretchRootToFullScreen(shell);
+
+            ApplyBackgroundVisual(root);
+            StartVideoBackground();
+            StartLoadingAudio();
+
             _panel = root.Q<VisualElement>("panel");
             _particlesHost = root.Q<VisualElement>("particles-host");
             _serverGrid = root.Q<VisualElement>("server-grid");
@@ -94,19 +133,20 @@ namespace MuPegaso.Client.UI
             _btnG3 = root.Q<Button>("btn-group-3");
             _closeBtn = root.Q<Button>("close-btn");
 
-            _btnRecent.clicked += OnRecentClicked;
-            _btnG1.clicked += OnGroup1Clicked;
-            _btnG2.clicked += OnGroup2Clicked;
-            _btnG3.clicked += OnGroup3Clicked;
-            _connectBtn.clicked += OnConnectClicked;
-            _closeBtn.clicked += OnCloseClicked;
+            if (_btnRecent != null) _btnRecent.clicked += OnRecentClicked;
+            if (_btnG1 != null) _btnG1.clicked += OnGroup1Clicked;
+            if (_btnG2 != null) _btnG2.clicked += OnGroup2Clicked;
+            if (_btnG3 != null) _btnG3.clicked += OnGroup3Clicked;
+            if (_connectBtn != null) _connectBtn.clicked += OnConnectClicked;
+            if (_closeBtn != null) _closeBtn.clicked += OnCloseClicked;
 
             if (_footerText != null)
                 _footerText.enableRichText = true;
 
-            _connectBtn.SetEnabled(false);
-            RefreshFooter();
+            if (_connectBtn != null)
+                _connectBtn.SetEnabled(false);
 
+            RefreshFooter();
             PlayPanelIntro();
             ScheduleParticles();
 
@@ -117,6 +157,9 @@ namespace MuPegaso.Client.UI
 
         private void OnDisable()
         {
+            StopLoadingAudio();
+            StopVideoBackground();
+
             _particleTicker?.Pause();
             _particleTicker = null;
             _particles.Clear();
@@ -136,17 +179,79 @@ namespace MuPegaso.Client.UI
         {
             if (_panel == null) return;
 
+            /* Sin translate en #panel (centrado con flex); solo fade */
             _panel.style.opacity = 0f;
-            _panel.style.translate = new Translate(
-                new Length(0, LengthUnit.Pixel),
-                new Length(24, LengthUnit.Pixel),
-                0);
 
-            _panel.schedule.Execute(() =>
+            _panel.schedule.Execute(() => { _panel.style.opacity = 1f; }).StartingIn(32);
+        }
+
+        private void ApplyBackgroundVisual(VisualElement treeRoot)
+        {
+            var bg = treeRoot.Q<VisualElement>("bg-image");
+            if (bg == null) return;
+
+            if (videoRenderTexture != null)
             {
-                _panel.style.opacity = 1f;
-                _panel.style.translate = new Translate(0, 0, 0);
-            }).StartingIn(32);
+                bg.style.backgroundImage = new StyleBackground(Background.FromRenderTexture(videoRenderTexture));
+                bg.style.unityBackgroundScaleMode = ScaleMode.ScaleAndCrop;
+                return;
+            }
+
+            ApplyStaticLauncherTexture(bg);
+        }
+
+        private void ApplyStaticLauncherTexture(VisualElement bg)
+        {
+            var tex = backgroundTexture;
+#if UNITY_EDITOR
+            if (tex == null)
+                tex = UnityEditor.AssetDatabase.LoadAssetAtPath<Texture2D>("Assets/Art/UI/Login/launcherBg.png");
+            if (tex == null)
+                tex = UnityEditor.AssetDatabase.LoadAssetAtPath<Texture2D>("Assets/Art/UI/Login/launcherBg_0.png");
+#endif
+            if (tex == null)
+                tex = Resources.Load<Texture2D>("Art/UI/Login/launcherBg");
+            if (tex == null)
+                tex = Resources.Load<Texture2D>("launcherBg");
+
+            if (tex == null) return;
+
+            bg.style.backgroundImage = new StyleBackground(tex);
+            bg.style.unityBackgroundScaleMode = ScaleMode.ScaleAndCrop;
+        }
+
+        private void StartVideoBackground()
+        {
+            if (videoPlayer == null || videoRenderTexture == null) return;
+
+            videoPlayer.renderMode = VideoRenderMode.RenderTexture;
+            videoPlayer.targetTexture = videoRenderTexture;
+            videoPlayer.audioOutputMode = VideoAudioOutputMode.None;
+            videoPlayer.isLooping = true;
+            videoPlayer.Play();
+        }
+
+        private void StopVideoBackground()
+        {
+            if (videoPlayer == null) return;
+            if (videoPlayer.isPlaying)
+                videoPlayer.Stop();
+        }
+
+        private void StartLoadingAudio()
+        {
+            if (audioSource == null || loadingSound == null) return;
+
+            audioSource.clip = loadingSound;
+            audioSource.loop = true;
+            audioSource.volume = 0.7f;
+            audioSource.Play();
+        }
+
+        private void StopLoadingAudio()
+        {
+            if (audioSource == null) return;
+            audioSource.Stop();
         }
 
         private void ScheduleParticles()
@@ -227,30 +332,33 @@ namespace MuPegaso.Client.UI
             ClearSelection();
             UpdateSidebarHighlight();
 
+            if (_serverGrid == null) return;
+
             if (_firstGridRender)
             {
                 _firstGridRender = false;
                 RenderGroup(groupId);
+                _serverGrid.style.opacity = 1f;
                 return;
             }
 
-            if (_serverGrid == null) return;
-
+            _serverGrid.style.transitionProperty = new StyleList<StylePropertyName>(
+                new List<StylePropertyName> { new StylePropertyName("opacity") });
+            _serverGrid.style.transitionDuration = new StyleList<TimeValue>(
+                new List<TimeValue> { new TimeValue(150, TimeUnit.Millisecond) });
             _serverGrid.style.opacity = 0f;
-            _serverGrid.style.translate = new Translate(
-                new Length(0, LengthUnit.Pixel),
-                new Length(-8, LengthUnit.Pixel),
-                0);
 
             _serverGrid.schedule.Execute(() =>
             {
                 RenderGroup(groupId);
-                _serverGrid.style.translate = new Translate(0, 0, 0);
+                _serverGrid.style.transitionDuration = new StyleList<TimeValue>(
+                    new List<TimeValue> { new TimeValue(200, TimeUnit.Millisecond) });
                 _serverGrid.style.opacity = 1f;
-            }).StartingIn(150);
+            }).StartingIn(160);
         }
 
-        private void RenderGroup(int groupId)
+        /// <summary>Limpia el grid y vuelve a crear las cards del grupo.</summary>
+        public void RenderGroup(int groupId)
         {
             if (_serverGrid == null) return;
 
@@ -276,7 +384,7 @@ namespace MuPegaso.Client.UI
             }
         }
 
-        private VisualElement CreateServerCard(ServerData server)
+        public VisualElement CreateServerCard(ServerData server)
         {
             var card = new VisualElement();
             card.AddToClassList("server-card");
@@ -334,7 +442,7 @@ namespace MuPegaso.Client.UI
             else
             {
                 var id = server.id;
-                card.RegisterCallback<ClickEvent>(_ => ToggleSelectServer(id));
+                card.RegisterCallback<ClickEvent>(_ => SelectServer(id));
             }
 
             return card;
@@ -390,7 +498,7 @@ namespace MuPegaso.Client.UI
             }
         }
 
-        private void ToggleSelectServer(int id)
+        private void SelectServer(int id)
         {
             if (selectedServerId == id)
                 selectedServerId = -1;
@@ -425,7 +533,7 @@ namespace MuPegaso.Client.UI
 
             if (selectedServerId < 0)
             {
-                _footerText.text = "Servidor seleccionado: <color=#94A3B8>—</color>";
+                _footerText.text = "Ningún servidor seleccionado";
                 _connectBtn.SetEnabled(false);
                 return;
             }

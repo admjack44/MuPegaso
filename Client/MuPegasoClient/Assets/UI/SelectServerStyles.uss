@@ -1,25 +1,35 @@
-/* Select Server — Unity 6 USS (UI Toolkit)
- * Tema oscuro gaming. Fuente: Panel Settings / tema runtime (opcional: Rajdhani en Theme).
+/* Select Server — Unity 6 · SelectServer.uxml
+ * No tocar selectores internos del runtime (#unity-content-container, unity-scroll-*): pueden disparar asserts en RepaintPanels.
  */
 
 .select-server-root {
   flex-grow: 1;
   flex-direction: column;
+  align-items: center;
   justify-content: center;
-  align-items: stretch;
   width: 100%;
   height: 100%;
   min-height: 100%;
-  background-color: #0a0c10;
+  position: relative;
 }
 
-/* Fondo + partículas a pantalla completa */
+/* Imagen de fondo (launcher) detrás de partículas */
+#bg-image {
+  position: absolute;
+  left: 0;
+  top: 0;
+  right: 0;
+  bottom: 0;
+}
+
 #background {
   position: absolute;
   left: 0;
   top: 0;
   right: 0;
   bottom: 0;
+  width: 100%;
+  height: 100%;
   background-color: #0a0c10;
 }
 
@@ -37,18 +47,12 @@
   background-color: rgba(96, 165, 250, 0.28);
 }
 
-/* Panel principal — escala con referencia 1920×1080 / 1280×720 (PanelSettings) */
+/* FIX 2: panel fijo 900×560, sin position:absolute ni translate en el panel */
 #panel {
+  position: relative;
   flex-shrink: 0;
-  align-self: center;
-  width: 92%;
-  max-width: 920px;
-  min-width: 480px;
-  height: 72%;
-  max-height: 620px;
-  min-height: 420px;
-  margin-top: 12px;
-  margin-bottom: 12px;
+  width: 900px;
+  height: 560px;
   flex-direction: column;
   overflow: hidden;
   background-color: #0f1219;
@@ -62,16 +66,15 @@
   border-left-color: #1e2535;
   border-radius: 2px;
 
-  transition-property: opacity, translate;
+  transition-property: opacity;
   transition-duration: 0.35s;
-  transition-timing-function: cubic-bezier(0.16, 1, 0.3, 1);
+  transition-timing-function: ease-out;
 }
 
-/* Línea acento superior — gradiente azul */
 #top-accent-line {
   position: absolute;
-  left: 0;
   top: 0;
+  left: 0;
   right: 0;
   height: 2px;
   background-image: linear-gradient(
@@ -84,7 +87,6 @@
   );
 }
 
-/* Scanline vertical recorriendo el panel */
 #scanline {
   position: absolute;
   left: 0;
@@ -105,23 +107,22 @@
 
 @keyframes scanline-move {
   from {
-    translate: 0 -100%;
+    translate: 0 -1080px;
   }
   to {
-    translate: 0 100%;
+    translate: 0 1080px;
   }
 }
 
-/* Esquinas HUD */
 #corner-tl {
   position: absolute;
+  top: 10px;
   left: 10px;
-  top: 14px;
   width: 14px;
   height: 14px;
   border-top-width: 2px;
-  border-top-color: #3b82f6;
   border-left-width: 2px;
+  border-top-color: #3b82f6;
   border-left-color: #3b82f6;
   border-right-width: 0;
   border-bottom-width: 0;
@@ -129,13 +130,13 @@
 
 #corner-tr {
   position: absolute;
+  top: 10px;
   right: 10px;
-  top: 14px;
   width: 14px;
   height: 14px;
   border-top-width: 2px;
-  border-top-color: #3b82f6;
   border-right-width: 2px;
+  border-top-color: #3b82f6;
   border-right-color: #3b82f6;
   border-left-width: 0;
   border-bottom-width: 0;
@@ -143,13 +144,13 @@
 
 #corner-bl {
   position: absolute;
-  left: 10px;
   bottom: 10px;
+  left: 10px;
   width: 14px;
   height: 14px;
   border-bottom-width: 2px;
-  border-bottom-color: #3b82f6;
   border-left-width: 2px;
+  border-bottom-color: #3b82f6;
   border-left-color: #3b82f6;
   border-right-width: 0;
   border-top-width: 0;
@@ -157,23 +158,23 @@
 
 #corner-br {
   position: absolute;
-  right: 10px;
   bottom: 10px;
+  right: 10px;
   width: 14px;
   height: 14px;
   border-bottom-width: 2px;
-  border-bottom-color: #3b82f6;
   border-right-width: 2px;
+  border-bottom-color: #3b82f6;
   border-right-color: #3b82f6;
   border-left-width: 0;
   border-top-width: 0;
 }
 
-/* Header */
 #header {
   flex-direction: row;
-  justify-content: space-between;
   align-items: flex-start;
+  justify-content: space-between;
+  flex-shrink: 0;
   padding: 14px 18px 12px;
   margin-top: 6px;
   border-bottom-width: 1px;
@@ -183,15 +184,10 @@
   border-left-width: 0;
 }
 
-#header-left {
-  flex-direction: row;
-  align-items: center;
-}
-
 #header-icon {
-  width: 36px;
-  height: 36px;
-  margin-right: 12px;
+  width: 32px;
+  height: 32px;
+  margin-right: 10px;
   background-color: rgba(59, 130, 246, 0.12);
   border-radius: 6px;
   border-top-width: 2px;
@@ -205,31 +201,32 @@
   rotate: 45deg;
 }
 
+#header-left {
+  flex-direction: row;
+  align-items: center;
+}
+
 #header-text {
   flex-direction: column;
 }
 
 #title {
-  font-size: 20px;
-  -unity-font-style: bold;
-  letter-spacing: 2px;
+  font-size: 18px;
   color: #e2e8f0;
+  letter-spacing: 2px;
+  -unity-font-style: bold;
 }
 
 #subtitle {
   font-size: 11px;
-  margin-top: 4px;
-  color: #94a3b8;
+  color: #4a5568;
   letter-spacing: 1px;
+  margin-top: 4px;
 }
 
 #close-btn {
-  width: 38px;
-  height: 34px;
-  border-radius: 2px;
-  background-color: transparent;
-  color: #94a3b8;
-  font-size: 15px;
+  width: 36px;
+  height: 32px;
   border-top-width: 1px;
   border-top-color: #1e2535;
   border-right-width: 1px;
@@ -238,31 +235,36 @@
   border-bottom-color: #1e2535;
   border-left-width: 1px;
   border-left-color: #1e2535;
+  background-color: transparent;
+  color: #94a3b8;
+  font-size: 14px;
+  -unity-text-align: middle-center;
 }
 
 #close-btn:hover {
-  background-color: rgba(37, 99, 235, 0.15);
-  color: #e2e8f0;
+  border-top-color: #3b82f6;
+  border-right-color: #3b82f6;
+  border-bottom-color: #3b82f6;
+  border-left-color: #3b82f6;
+  color: #60a5fa;
 }
 
-/* Body */
 #body {
-  flex-grow: 1;
   flex-direction: row;
+  flex-grow: 1;
+  flex-shrink: 1;
   min-height: 0;
+  min-width: 0;
 }
 
 #sidebar {
   width: 148px;
   flex-shrink: 0;
   background-color: #0c0f16;
-  flex-direction: column;
-  padding: 12px 10px;
   border-right-width: 1px;
   border-right-color: #1e2535;
-  border-top-width: 0;
-  border-bottom-width: 0;
-  border-left-width: 0;
+  padding: 12px 10px;
+  flex-direction: column;
 }
 
 #label-recent,
@@ -272,6 +274,7 @@
   color: #64748b;
   margin-bottom: 6px;
   margin-left: 2px;
+  -unity-font-style: bold;
 }
 
 #divider {
@@ -282,21 +285,21 @@
 
 .sidebar-btn {
   margin-bottom: 6px;
-  padding: 10px 12px;
+  padding: 8px 10px;
+  font-size: 11px;
   border-radius: 2px;
-  font-size: 12px;
-  -unity-font-style: bold;
-  background-color: transparent;
-  color: #94a3b8;
-  align-items: flex-start;
   border-top-width: 1px;
-  border-top-color: #1e2535;
+  border-top-color: #1a2030;
   border-right-width: 1px;
-  border-right-color: #1e2535;
+  border-right-color: #1a2030;
   border-bottom-width: 1px;
-  border-bottom-color: #1e2535;
+  border-bottom-color: #1a2030;
   border-left-width: 1px;
-  border-left-color: #1e2535;
+  border-left-color: #1a2030;
+  color: #4b5563;
+  background-color: transparent;
+  align-items: flex-start;
+  -unity-font-style: bold;
 }
 
 .sidebar-btn:hover {
@@ -304,7 +307,7 @@
   border-right-color: #2a3555;
   border-bottom-color: #2a3555;
   border-left-color: #2a3555;
-  color: #e2e8f0;
+  color: #94a3b8;
 }
 
 .sidebar-btn-active {
@@ -320,18 +323,16 @@
   flex-grow: 1;
   flex-direction: column;
   min-width: 0;
+  min-height: 0;
   padding: 10px 14px 0;
 }
 
-/* Leyenda */
 #legend {
   flex-direction: row;
   flex-wrap: wrap;
   align-items: center;
-  column-gap: 14px;
-  row-gap: 8px;
-  padding-bottom: 10px;
   margin-bottom: 10px;
+  padding-bottom: 8px;
   border-bottom-width: 1px;
   border-bottom-color: #141820;
   border-top-width: 0;
@@ -342,6 +343,8 @@
 .legend-row {
   flex-direction: row;
   align-items: center;
+  margin-right: 14px;
+  margin-bottom: 4px;
 }
 
 .legend-row > Label {
@@ -381,24 +384,16 @@
 
 @keyframes pulse-dot {
   0% {
-    scale: 1 1;
     opacity: 1;
   }
-  45% {
-    scale: 1.4 1.4;
-    opacity: 0;
-  }
-  55% {
-    scale: 1.4 1.4;
-    opacity: 0;
+  50% {
+    opacity: 0.35;
   }
   100% {
-    scale: 1 1;
     opacity: 1;
   }
 }
 
-/* Grid servidores */
 #server-scroll {
   flex-grow: 1;
   min-height: 0;
@@ -408,26 +403,22 @@
   flex-direction: row;
   flex-wrap: wrap;
   align-content: flex-start;
-  column-gap: 6px;
-  row-gap: 6px;
-  padding-bottom: 12px;
-
+  padding-bottom: 10px;
   transition-property: opacity;
   transition-duration: 0.2s;
-  transition-timing-function: ease-out;
 }
 
+/* FIX 2: cards ~48% fila; sin column-gap/row-gap (USS más estable) */
 .server-card {
-  flex-grow: 1;
-  flex-shrink: 0;
-  flex-basis: calc(50% - 3px);
-  min-width: 0;
-  max-width: calc(50% - 3px);
-  min-height: 54px;
   position: relative;
+  width: 47%;
+  flex-shrink: 0;
+  min-height: 56px;
   flex-direction: row;
-  align-items: center;
+  align-items: flex-start;
   padding: 10px 12px;
+  margin-right: 3%;
+  margin-bottom: 8px;
   background-color: #0d1020;
   border-radius: 2px;
   border-top-width: 1px;
@@ -438,13 +429,15 @@
   border-bottom-color: #1e2535;
   border-left-width: 1px;
   border-left-color: #1e2535;
+  font-size: 12px;
 
-  transition-property: border-top-color, border-right-color, border-bottom-color, border-left-color, scale;
-  transition-duration: 0.12s;
+  /* Una duración por cada propiedad en transition-property (evita crash del StylePropertyReader en Unity 6). scale no va en transition aquí. */
+  transition-property: border-top-color, border-right-color, border-bottom-color, border-left-color;
+  transition-duration: 0.12s, 0.12s, 0.12s, 0.12s;
+  transition-timing-function: ease, ease, ease, ease;
 }
 
 .server-card:hover {
-  scale: 1.015 1.015;
   border-top-color: #2563eb;
   border-right-color: #2563eb;
   border-bottom-color: #2563eb;
@@ -453,17 +446,6 @@
 
 .server-card:hover > .card-left-bar {
   background-color: #1d4ed8;
-}
-
-.card-left-bar {
-  position: absolute;
-  left: 0;
-  top: 0;
-  bottom: 0;
-  width: 3px;
-  background-color: transparent;
-  transition-property: background-color;
-  transition-duration: 0.12s;
 }
 
 .server-card--maintenance {
@@ -478,21 +460,33 @@
   background-color: #0c1830;
 }
 
+.card-left-bar {
+  position: absolute;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  width: 3px;
+  background-color: transparent;
+}
+
 .server-card.selected > .card-left-bar {
   background-color: #3b82f6;
 }
 
 .server-card-inner {
   flex-direction: row;
-  align-items: center;
+  flex-wrap: wrap;
+  align-items: flex-start;
   flex-grow: 1;
   min-width: 0;
+  width: 100%;
 }
 
 .card-dot {
   width: 10px;
   height: 10px;
   margin-right: 8px;
+  margin-top: 3px;
   border-radius: 5px;
   flex-shrink: 0;
 }
@@ -500,11 +494,12 @@
 .server-card-name {
   flex-grow: 1;
   flex-shrink: 1;
-  font-size: 14px;
+  min-width: 80px;
+  font-size: 12px;
   -unity-font-style: bold;
   color: #e2e8f0;
-  text-overflow: ellipsis;
-  overflow: hidden;
+  white-space: normal;
+  overflow: visible;
 }
 
 .server-card.selected .server-card-name {
@@ -512,10 +507,13 @@
 }
 
 .server-status-label {
+  flex-basis: 100%;
   flex-shrink: 0;
-  margin-left: 8px;
-  font-size: 9px;
-  letter-spacing: 1px;
+  margin-left: 18px;
+  margin-top: 4px;
+  font-size: 11px;
+  letter-spacing: 0.5px;
+  white-space: normal;
 }
 
 .status-available {
@@ -534,7 +532,6 @@
   color: #64748b;
 }
 
-/* Badge NUEVO + shimmer */
 .badge-new-wrap {
   position: absolute;
   right: 8px;
@@ -579,46 +576,39 @@
 
 @keyframes shimmer-move {
   0% {
-    translate: -120% 0;
+    translate: -80px 0;
   }
   100% {
-    translate: 220% 0;
+    translate: 200px 0;
   }
 }
 
-/* Footer */
 #footer {
   flex-shrink: 0;
   flex-direction: row;
   justify-content: space-between;
   align-items: center;
-  padding: 12px 18px;
+  padding: 10px 18px;
   border-top-width: 1px;
   border-top-color: #1e2535;
-  border-right-width: 0;
-  border-bottom-width: 0;
-  border-left-width: 0;
-  background-color: rgba(12, 15, 22, 0.96);
+  background-color: #0c0f16;
 }
 
 #footer-text {
   flex-grow: 1;
   flex-shrink: 1;
-  margin-right: 14px;
-  font-size: 13px;
+  margin-right: 12px;
+  font-size: 12px;
   color: #94a3b8;
   white-space: normal;
 }
 
 #connect-btn {
   flex-shrink: 0;
-  padding: 10px 22px;
+  padding: 8px 24px;
   font-size: 13px;
   -unity-font-style: bold;
-  letter-spacing: 1px;
-  background-color: #0f1e38;
-  color: #60a5fa;
-  border-radius: 2px;
+  letter-spacing: 2px;
   border-top-width: 1px;
   border-top-color: #1d4ed8;
   border-right-width: 1px;
@@ -627,14 +617,12 @@
   border-bottom-color: #1d4ed8;
   border-left-width: 1px;
   border-left-color: #1d4ed8;
+  background-color: #0f1e38;
+  color: #60a5fa;
 }
 
-#connect-btn:hover:enabled {
+#connect-btn:hover {
   background-color: #1e3a6e;
-}
-
-#connect-btn:active:enabled {
-  scale: 0.98 0.98;
 }
 
 #connect-btn:disabled {

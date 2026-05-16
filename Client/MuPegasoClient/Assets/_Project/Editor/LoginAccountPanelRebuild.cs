@@ -12,7 +12,7 @@ namespace MuPegaso.Client.Editor
         [MenuItem("Tools/MuPegaso/Rebuild Login Account Panel")]
         public static void Run()
         {
-            var canvas = Object.FindObjectOfType<Canvas>();
+            var canvas = Object.FindFirstObjectByType<Canvas>();
             if (canvas == null) { Debug.LogError("No Canvas"); return; }
             var paTf = canvas.transform.Find("Panel_Account");
             if (paTf == null) { Debug.LogError("No Panel_Account"); return; }
@@ -237,7 +237,7 @@ namespace MuPegaso.Client.Editor
             fsGo.AddComponent<LayoutElement>().preferredHeight = 36f;
 
             var lcGo = GameObject.Find("LoginSceneRoot");
-            var lc = lcGo != null ? lcGo.GetComponent<MuPegaso.Client.UI.LoginController>() : Object.FindObjectOfType<MuPegaso.Client.UI.LoginController>();
+            var lc = lcGo != null ? lcGo.GetComponent<MuPegaso.Client.UI.LoginController>() : Object.FindFirstObjectByType<MuPegaso.Client.UI.LoginController>();
             if (lc == null) { Debug.LogError("No LoginController"); return; }
             var so = new SerializedObject(lc);
             so.FindProperty("panelAccount").objectReferenceValue = paTf.gameObject;
