@@ -3,12 +3,18 @@ using UnityEngine.UI;
 using TMPro;
 using UnityEngine.Video;
 using UnityEngine.SceneManagement;
+#if UNITY_EDITOR
+using UnityEditor;
+#endif
 
 namespace MuPegaso.Client.UI
 {
     public class LoginController : MonoBehaviour
     {
         const string SelectServerScene = "SelectServer";
+
+        [Header("Audio")]
+        [SerializeField] private AudioClip clickSound;
 
         Canvas _canvas;
 
@@ -41,6 +47,12 @@ namespace MuPegaso.Client.UI
         {
             Debug.Log("LoginController Start OK");
 
+#if UNITY_EDITOR
+            if (clickSound == null)
+                clickSound = UnityEditor.AssetDatabase.LoadAssetAtPath<AudioClip>(
+                    "Assets/Audio/SFX/ui/ui_open.ogg");
+#endif
+
             if (!BindReferences())
                 return;
 
@@ -51,21 +63,21 @@ namespace MuPegaso.Client.UI
                 _panelAccount.SetActive(false);
 
             if (_btnClose != null)
-                _btnClose.onClick.AddListener(CloseAccountPanel);
+                _btnClose.onClick.AddListener(() => { PlayClick(); CloseAccountPanel(); });
 
             if (_tabLogin != null)
-                _tabLogin.onClick.AddListener(() => ShowTab("login"));
+                _tabLogin.onClick.AddListener(() => { PlayClick(); ShowTab("login"); });
             if (_tabRegister != null)
-                _tabRegister.onClick.AddListener(() => ShowTab("register"));
+                _tabRegister.onClick.AddListener(() => { PlayClick(); ShowTab("register"); });
             if (_tabRecover != null)
-                _tabRecover.onClick.AddListener(() => ShowTab("recover"));
+                _tabRecover.onClick.AddListener(() => { PlayClick(); ShowTab("recover"); });
 
             if (_btnLoginAccount != null)
-                _btnLoginAccount.onClick.AddListener(OnFormLogin);
+                _btnLoginAccount.onClick.AddListener(() => { PlayClick(); OnFormLogin(); });
             if (_btnRegisterAccount != null)
-                _btnRegisterAccount.onClick.AddListener(OnRegister);
+                _btnRegisterAccount.onClick.AddListener(() => { PlayClick(); OnRegister(); });
             if (_btnRecoverAccount != null)
-                _btnRecoverAccount.onClick.AddListener(OnRecover);
+                _btnRecoverAccount.onClick.AddListener(() => { PlayClick(); OnRecover(); });
 
             if (_statusText != null)
                 _statusText.text = "";
@@ -131,6 +143,12 @@ namespace MuPegaso.Client.UI
             return _canvas != null && _panelAccount != null;
         }
 
+        void PlayClick()
+        {
+            if (clickSound != null)
+                AudioSource.PlayClipAtPoint(clickSound, Vector3.zero, 0.8f);
+        }
+
         void BindLoginButtons()
         {
             var allButtons = FindObjectsByType<Button>(FindObjectsSortMode.None);
@@ -139,23 +157,23 @@ namespace MuPegaso.Client.UI
                 switch (btn.gameObject.name)
                 {
                     case "Btn_Google":
-                        btn.onClick.AddListener(() => SceneManager.LoadScene("SelectServer"));
+                        btn.onClick.AddListener(() => { PlayClick(); SceneManager.LoadScene("SelectServer"); });
                         Debug.Log("Btn_Google asignado");
                         break;
                     case "Btn_Facebook":
-                        btn.onClick.AddListener(() => SceneManager.LoadScene("SelectServer"));
+                        btn.onClick.AddListener(() => { PlayClick(); SceneManager.LoadScene("SelectServer"); });
                         Debug.Log("Btn_Facebook asignado");
                         break;
                     case "Btn_Apple":
-                        btn.onClick.AddListener(() => SceneManager.LoadScene("SelectServer"));
+                        btn.onClick.AddListener(() => { PlayClick(); SceneManager.LoadScene("SelectServer"); });
                         Debug.Log("Btn_Apple asignado");
                         break;
                     case "Btn_Guest":
-                        btn.onClick.AddListener(() => SceneManager.LoadScene("SelectServer"));
+                        btn.onClick.AddListener(() => { PlayClick(); SceneManager.LoadScene("SelectServer"); });
                         Debug.Log("Btn_Guest asignado");
                         break;
                     case "Btn_Account":
-                        btn.onClick.AddListener(OnAccountClicked);
+                        btn.onClick.AddListener(() => { PlayClick(); OnAccountClicked(); });
                         Debug.Log("Btn_Account asignado");
                         break;
                 }

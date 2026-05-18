@@ -18,7 +18,7 @@ namespace MuPegaso.Client.UI
         [SerializeField] private VisualTreeAsset uiTreeAsset;
         [SerializeField] private List<ServerData> servers = new List<ServerData>();
         [SerializeField] private PanelSettings panelSettingsAsset;
-        [SerializeField] private string gameSceneName = "Game";
+        [SerializeField] private string gameSceneName = "Loading";
         [SerializeField] private string closeSceneName = "Login";
         [Tooltip("Opcional: fondo launcher. Si está vacío se intenta cargar desde Assets en Editor o Resources en runtime.")]
         [SerializeField] private Texture2D backgroundTexture;

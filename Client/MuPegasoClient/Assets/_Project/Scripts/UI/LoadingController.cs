@@ -46,13 +46,7 @@ namespace MuPegaso.Client.UI
 
         void Awake()
         {
-            // EventSystem
-            if (FindFirstObjectByType<EventSystem>() == null)
-            {
-                var es = new GameObject("EventSystem");
-                es.AddComponent<EventSystem>();
-                es.AddComponent<StandaloneInputModule>();
-            }
+            UIEventSystemHelper.Ensure();
 
             // Cargar texturas en editor
 #if UNITY_EDITOR
